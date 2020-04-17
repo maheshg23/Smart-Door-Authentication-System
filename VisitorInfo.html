@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Visitor Information WebPage</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js"></script>
+
+    <script type="text/javascript" src="js/lib/axios/dist/axios.standalone.js"></script>
+    <script type="text/javascript" src="js/lib/CryptoJS/rollups/hmac-sha256.js"></script>
+    <script type="text/javascript" src="js/lib/CryptoJS/rollups/sha256.js"></script>
+    <script type="text/javascript" src="js/lib/CryptoJS/components/hmac.js"></script>
+    <script type="text/javascript" src="js/lib/CryptoJS/components/enc-base64.js"></script>
+    <script type="text/javascript" src="js/lib/url-template/url-template.js"></script>
+    <script type="text/javascript" src="js/lib/apiGatewayCore/sigV4Client.js"></script>
+    <script type="text/javascript" src="js/lib/apiGatewayCore/apiGatewayClient.js"></script>
+    <script type="text/javascript" src="js/lib/apiGatewayCore/simpleHttpClient.js"></script>
+    <script type="text/javascript" src="js/lib/apiGatewayCore/utils.js"></script>
+    <script type="text/javascript" src="js/apigClient.js"></script>
+
+    
+
+</head>
+
+<body> 
+<h2 align="center">Visitor Information WebPage</h2>
+<!--<form align = "center">-->
+    <div align="center">
+        <label for="name">Name of Visitor:</label>
+        <input type="text" id="visitor-name" name="name"><br>
+        <label for="phone">Phone Number:</label>
+        <input type="text" id="phone-number" name="phoneNumber"><br><br>
+        <input type="submit" value="Submit" onclick = "sendMessageToApi()"><br><br>
+        <p>If you click the submit button visitor will be given the access to door</p>
+    </div>
+<!--</form>-->
+    
+<script> 
+   function sendMessageToApi() {
+        
+        var visitor = document.getElementById('visitor-name').value.trim().toLowerCase();
+        console.log(visitor)
+        var phone = document.getElementById('phone-number').value.trim().toLowerCase();
+        console.log(phone)
+        var link = window.location.href;
+        console.log(link)
+        var faceid;
+        var fileName;
+        
+        if (link) {
+            console.log(link)
+            link = link.split('?')[1];
+            var a = link.split('=');
+            if (a[0] == "fileName") {
+                s3key = a[1];
+            }
+            
+        }
+        console.log(faceid);
+        console.log(s3key)
+        apigClient = apigClientFactory.newClient();
+        console.log('initialized client')
+        var params = {};
+        var body = {
+            'message' : {    
+                            'name': visitor,
+                            'phone': phone,
+                            'fileName': s3key
+                        }
+            }
+
+        var additionalParams = {};
+
+        apigClient.visitorCheckPost(params, body, additionalParams)
+            .then(function (result) {
+                alert(result.data.body)
+                console.log(result)
+            }).catch(function (result) {
+            //This is where you would put an error callback
+        });
+    }
+
+</script>
+
+</body>
+</html>
