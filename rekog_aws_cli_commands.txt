@@ -1,0 +1,77 @@
+aws rekognition create-collection 
+    --collection-id smartdoor-visitors 
+    --region us-east-1
+
+aws rekognition index-faces 
+    --collection-id smartdoor-visitors 
+    --image '{"S3Object":{"Bucket":"smartdoor-visitor-faces","Name":"Mahesh_Photo1.jpg"}}' 
+    --external-image-id mahesh_test 
+    --region us-east-1
+
+aws rekognition create-stream-processor 
+    --input '{"KinesisVideoStream":{"Arn":"arn:aws:kinesisvideo:us-east-1:116488774835:stream/KVS1/1585408064715"}}' 
+    --name door-processor 
+    --role-arn arn:aws:iam::116488774835:role/RekognitionRole 
+    --stream-processor-output '{"KinesisDataStream":{"Arn":"arn:aws:kinesis:us-east-1:116488774835:stream/rekog_output"}}' 
+    --settings '{"FaceSearch":{"CollectionId":"smartdoor-visitors", "FaceMatchThreshold": 85.5}}' 
+    --region us-east-1
+
+aws rekognition start-stream-processor 
+    --name door-processor 
+    --region us-east-1
+
+aws rekognition stop-stream-processor
+    --name door-processor 
+    --region us-east-1
+
+aws kinesis register-stream-consumer 
+    --consumer-name Assign2_LF1 
+    --stream-arn arn:aws:kinesis:us-east-1:116488774835:stream/rekog_output 
+    --region us-east-1
+
+aws kinesis get-shard-iterator 
+    --shard-id shardId-000000000000 
+    --shard-iterator-type TRIM_HORIZON 
+    --stream-name rekog_output 
+    --region us-east-1
+
+aws kinesis get-records 
+    --shard-iterator AAAAAAAAAAGD1vD8wiXr61qeaN3SkJBLvd9iLiRRjwAWod8jDe1JnYBMb5Ga+iktW7dx2SqUuiyT+HnnluFPR254QcPpmN5WFnkbU9VH/ZSOEowJO8D30EZGAE4/Td6yasm23NhG/4BwTW5Baaa7gLw0fE/19j8oOy6NmTc0trE/hZNFSQm+wfoHSw9SelyawysPSN6cqouGuz1oPAYXiCX2wvO5O7Vw 
+    --region us-east-1
+    
+
+aws rekognition search-faces-by-image 
+    --collection-id smartdoor-visitors 
+    --image-bytes fileb://Mahesh_test.jpg
+
+aws kinesis-video-archived-media get-media-for-fragment-list   
+    --stream-name KVS1 
+    --fragments='["91343852333181512135827633234885364778705130140"]' outfile.mkv 
+    --endpoint-url https://b-604520a7.kinesisvideo.us-east-1.amazonaws.com
+
+aws kinesisvideo get-data-endpoint 
+    --stream-name KVS1 
+    --api-name GET_MEDIA_FOR_FRAGMENT_LIST
+
+aws rekognition delete-faces 
+    --collection-id "smartdoor-visitors" 
+    --face-ids '["faceid"]' 
+    --region us-east-1
+
+aws rekognition delete-collection 
+    --collection-id "smartdoor-visitors" 
+    --region us-east-1
+
+aws rekognition delete-stream-processor 
+    --name door-processor 
+    --region us-east-1
+
+aws rekognition list-collections
+
+aws rekognition list-faces 
+    --collection-id smartdoor-visitors 
+    --region us-east-1 
+
+aws rekognition list-stream-processors 
+    --region us-east-1 
+
