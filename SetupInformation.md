@@ -18,15 +18,12 @@ We need to build our own openCV library which we can attach it to the Kinesis_st
 Refer to [5] create a zip files and add it to the Lambda Layer.
 
 After you add the OpenCV Zip file into the lambda layer and then attach the layer to the lambda function we need to change the envionemnt variable 
+"/var/runtime" is for Boto3 and other python libraries and "/opt/"is for the OpenCV library that we added to the Lambda layer 
 
-PYTHONPATH = /var/runtime:/opt/
-
-/var/runtime -> is for Boto3 and other python libraries 
-/opt/ -> is for the OpenCV library that we added to the Lambda layer 
+`PYTHONPATH = /var/runtime:/opt/`
 
 ## DynamoDB Tables 
 Create 3 DynamoDB Tables - visitors, passcode and emailfilter
-
 
 ## Reference - 
 [1] https://medium.com/@matt.collins/facial-recognition-with-a-raspberry-pi-and-kinesis-video-streams-part-2-9c9a631e8c24  
