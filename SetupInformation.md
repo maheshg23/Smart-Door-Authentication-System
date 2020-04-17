@@ -1,7 +1,7 @@
 # Setup Infromation for the Application
 
 ## GStreamer Plugin for  Mac 
-Go to https://github.com/awslabs/amazon-kinesis-video-streams-producer-sdk-cpp/blob/master/README.md and build you Gstreamer Plugin 
+Go to [2] and build you Gstreamer Plugin 
 
 Go to the GStreamer Producer folder to start the Gstreamer
 `cd amazon-kinesis-video-streams-producer-sdk-cpp/kinesis-video-native-build/downloads/local/bin`
@@ -15,7 +15,7 @@ run the commands in the rekog_aws_cli_commands.txt before you start the GStreame
 
 ## OpenCV Library Build
 We need to build our own openCV library which we can attach it to the Kinesis_stream_data lambda funtion using the lambda layers 
-Refer this to create a zip files and add it to the Lambda Layer https://itnext.io/create-a-highly-scalable-image-processing-service-on-aws-lambda-and-api-gateway-in-10-minutes-7cbb2893a479
+Refer to [5] create a zip files and add it to the Lambda Layer.
 
 After you add the OpenCV Zip file into the lambda layer and then attach the layer to the lambda function we need to change the envionemnt variable 
 
@@ -26,3 +26,11 @@ PYTHONPATH = /var/runtime:/opt/
 
 ## DynamoDB Tables 
 Create 3 DynamoDB Tables - visitors, passcode and emailfilter
+
+
+## Reference - 
+[1] https://medium.com/@matt.collins/facial-recognition-with-a-raspberry-pi-and-kinesis-video-streams-part-2-9c9a631e8c24  
+[2] https://github.com/awslabs/amazon-kinesis-video-streams-producer-sdk-cpp/blob/master/README.md  
+[3] https://medium.com/faun/a-quick-introduction-to-aws-rekognition-8257d4777198  
+[4] https://github.com/aeddi/aws-lambda-python-opencv/blob/master/build.sh  
+[5] https://itnext.io/create-a-highly-scalable-image-processing-service-on-aws-lambda-and-api-gateway-in-10-minutes-7cbb2893a479  
