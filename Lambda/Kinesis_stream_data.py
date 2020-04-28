@@ -43,7 +43,6 @@ def getVisitorsPhoneNumber(tableName,faceId):
     item = tableName.get_item( 
         Key={'faceId': faceId
         })
-    # print(json.dumps(item, indent=2))
     return item['Item']['phone']
     
     
@@ -68,7 +67,7 @@ def sendEmail(url,fileName):
             'Html': {
                 'Charset': 'UTF-8',
                 'Data': '<a class="ulink" href="'+url+'">Click here for Vistors photo</a>.<br><br>'+
-                    '<a class= "ulink" href = "'+visitorUrl+'">Click here to enter information</a>',
+                    '<a class= "ulink" href = "'+visitorUrl+'">Click here to enter the Visitor Information</a>',
             }
         },
         'Subject': {

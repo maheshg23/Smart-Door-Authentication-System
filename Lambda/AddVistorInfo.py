@@ -5,8 +5,6 @@ from datetime import datetime
 from datetime import timedelta
 import random
 
-
-
 def sendSMS(phone,faceId,otp):
     sns = boto3.client('sns', region_name = 'us-east-1')
     url = "https://smartdoorauthentication.s3.amazonaws.com/OTPlogin.html?faceId="+faceId
@@ -25,6 +23,7 @@ def sendSMS(phone,faceId,otp):
 def generateOTP():
     return random.randint(1000,9999)    
 
+
 def putToDynamoDbPasscodes(table, faceId):
     epochafter5 = int(datetime.now().timestamp()) + 300
     otp = generateOTP()
@@ -37,6 +36,7 @@ def putToDynamoDbPasscodes(table, faceId):
             })
     return otp    
     
+
 def getTimeStamp(fileName):
     s3 = boto3.client('s3')
     response = s3.get_object(
@@ -45,6 +45,7 @@ def getTimeStamp(fileName):
     )
     return response['LastModified'].strftime("%Y-%m-%d %H:%M:%S")
     
+
 def putToDynamoDbVisitors(table,faceId,name,phone,fileName):
     table.put_item(
         Item={
@@ -60,12 +61,14 @@ def putToDynamoDbVisitors(table,faceId,name,phone,fileName):
         }
     )
     
+
 def connectToDB(tableName):
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table(tableName)
     print(table.creation_date_time)
     return table
-    
+   
+
 def extractInformation(event):
     request = event["message"]
     #faceId = request["faceId"]
@@ -73,6 +76,7 @@ def extractInformation(event):
     phone = request["phone"]
     fileName = request["fileName"]
     return name, phone, fileName
+
 
 def indexFaceRekognition(buffer,name):
     rek = boto3.client('rekognition')
@@ -84,6 +88,7 @@ def indexFaceRekognition(buffer,name):
     ExternalImageId = name
     )
     return res
+
 
 def getFaceId(fileName,name):
     s3 = boto3.client('s3')
@@ -97,8 +102,6 @@ def getFaceId(fileName,name):
 
     
 def lambda_handler(event, context):
-    # TODO implement
-    #faceId, name, phone, fileName = extractInformation(event)
     name, phone, fileName = extractInformation(event)
     faceId = getFaceId(fileName, name)
     table = connectToDB('visitors')

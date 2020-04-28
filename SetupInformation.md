@@ -17,8 +17,7 @@ run the commands in the rekog_aws_cli_commands.txt before you start the GStreame
 We need to build our own openCV library which we can attach it to the Kinesis_stream_data lambda funtion using the lambda layers 
 Refer to [5] create a zip files and add it to the Lambda Layer.
 
-After you add the OpenCV Zip file into the lambda layer and then attach the layer to the lambda function we need to change the envionemnt variable 
-"/var/runtime" is for Boto3 and other python libraries and "/opt/"is for the OpenCV library that we added to the Lambda layer 
+After you add the OpenCV Zip file into the lambda layer and then attach the layer to the lambda function we need to change the environment variable PYTHONPATH. "/var/runtime" is for Boto3 and other python libraries and "/opt/"is for the OpenCV library that we added to the Lambda layer 
 
 `PYTHONPATH = /var/runtime:/opt/`
 

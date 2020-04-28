@@ -14,21 +14,21 @@ def validateOTP(res,userOtp):
             print(res["Item"])
             dbOTP = res["Item"]["OTP"]["N"]
             timeStamp = res["Item"]["ExpirationTimeStamp"]["N"]
-            #logger.debug(dbOTP,timeStamp)
             curTimeStamp = int(datetime.now().timestamp())
             userOtp = int(userOtp)
             dbOTP = int(dbOTP)
             timeStamp = int(timeStamp)
             if userOtp == dbOTP and timeStamp > curTimeStamp:
-                message = "Access Granted"
+                message = "ACCESS GRANTED"
             else:
-                message = "Access Denied"
+                message = "ACCESS DENIED"
                 logger.debug("db - " + str(timeStamp) + " now - " + str(curTimeStamp))
                 logger.debug("db - " + str(dbOTP) + " user - " + str(userOtp))
     except KeyError:
         message = "Invalid OTP"
     return message
-            
+
+
 def queryPasscodesDb(otp, faceId):
     dynamodb = boto3.client('dynamodb')
     res = dynamodb.get_item(
@@ -41,11 +41,12 @@ def queryPasscodesDb(otp, faceId):
         )
     return res
 
+
 def extractAttributes(res):
     return res["otp"],res["faceId"]
     
+
 def lambda_handler(event, context):
-    # TODO implement
     logger.debug("Helloo")
     otp, faceId = extractAttributes(event["message"])
     res = queryPasscodesDb(otp,faceId)
